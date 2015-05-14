@@ -1,0 +1,19 @@
+Deny from all
+
+#SSLRequireSSL
+
+#<FilesMatch ($^|test|phpinfo|request.php|style|sorttable|byname|upload|leaderboard|resume)>
+#	Order Deny,Allow
+#	Allow from all
+#</FilesMatch>
+
+#Options -Indexes
+
+#Options +ExecCGI
+#AddHandler cgi-script .py
+
+#RewriteEngine On
+#RewriteCond %{HTTPS} !=on
+#RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+#DirectoryIndex leaderboard.php
