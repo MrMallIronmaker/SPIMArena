@@ -1,5 +1,6 @@
 <?php
-$netId = substr($_SERVER["eppn"], 0, strpos($_SERVER["eppn"], '@'));
+require "user.php";
+
 $error_string = "";
 if ($_POST){
 	if ($netId == "" || $_POST["bot2"] == "")
