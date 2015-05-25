@@ -1,6 +1,7 @@
 <?php
-// get the netId
+
 require "user.php";
+
 
 $error_string = "";
 if ($_FILES)
@@ -8,23 +9,24 @@ if ($_FILES)
 	$target_dir = "pending/";
 	$bots_dir = "bots/";
 	$bots_file = $bots_dir . $netId;
-	$target_file = $target_dir . $netId);
+	$target_file = $target_dir . $netId;
+	$uploadOk = 1;
 
 	// Check file size
 	if ($_FILES["fileToUpload"]["size"] > 50000) {
     	$error_string = "<p style='color:red'>Sorry, your file is too large.</p>";
-	} 
-	// otherwise, try to upload
-	else {
+    	$uploadOk = 0;
+	}
+	// Check if $uploadOk is set to 0 by an error
+	if ($uploadOk === 0) {
+	// if everything is ok, try to upload file
+	} else {
 	    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-    	    $error_string = "<p style='color:green'>The file " 
-    	        . basename( $_FILES["fileToUpload"]["name"]) 
-    	        . " has been uploaded and renamed as " . $netId . ".</p>";
-		    shell_exec("./bot_test.sh " . $netId . " > out_bot_test.txt 2>&1 &");
-    	} else {
-        	$error_string = "<p style='color:red'>Sorry, there was an error uploading" 
-        		. " your file.</p>";
-    	}
+    	        $error_string = "<p style='color:green'>The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded and renamed as " . $netId . ".</p>";
+		shell_exec("./bot_test.sh " . $netId . " > out_bot_test.txt 2>&1 &");
+    	    } else {
+        	$error_string = "<p style='color:red'>Sorry, there was an error uploading your file.</p>";
+    	    }
 	}
 }
 
@@ -41,7 +43,7 @@ if ($_FILES)
 require("header.php");
 ?>
 <div class="bodyer">
-
+<p>
 <form class="pretty" action="upload.php" method="POST" enctype="multipart/form-data">
     <label>Select bot to upload:</label>
 	<input type="file" name="fileToUpload" id="fileToUpload"/>
