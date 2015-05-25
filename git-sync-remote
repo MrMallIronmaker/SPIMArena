@@ -1,4 +1,4 @@
-local=$(git status | grep "nothing to commit, working directory clean");
+local=$(git status | grep "nothing to commit");
 
 if [ -z "$local" ];
 then
