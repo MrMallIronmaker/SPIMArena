@@ -6,9 +6,10 @@ USER="mrmillr3"
 all: sync access upload request
 
 sync:
-	./git-sync
+	echo "Trying local"
+	./git-sync-local
 	echo "Trying remote..."
-	cat git-sync | ssh $(USER)@edu-staging.cs.illinois.edu
+	echo "cd /var/www/html/secure/spimarena; ./git-sync-remote" | ssh $(USER)@edu-staging.cs.illinois.edu
 
 access:
 

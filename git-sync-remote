@@ -1,0 +1,9 @@
+local=$(git status | grep "nothing to commit, working directory clean");
+
+if [ -z "$local" ];
+then
+	echo "git needs to be synchronized. try commit.";
+	exit 1;
+fi;
+
+git pull
