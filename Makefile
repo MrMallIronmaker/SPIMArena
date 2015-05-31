@@ -10,7 +10,9 @@ sync:
 	echo "cd /var/www/html/secure/spimarena; ./git-sync-remote" | ssh $(USER)@edu-staging.cs.illinois.edu
 
 access:
+	python test_access.py $(USER)
 
 upload:
+	python test_upload.py $(USER)
 
 request:
