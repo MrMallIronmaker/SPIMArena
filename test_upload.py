@@ -24,7 +24,7 @@ def ssh_init():
 # upload through the web interface
 def upload_bot(driver, bot_filename):
 	driver.get("https://edu-staging.cs.illinois.edu/secure/spimarena/upload.php")
-	driver.find_element_by_id("fileToUpload").clear()
+	#driver.find_element_by_id("fileToUpload").clear()
 	driver.find_element_by_id("fileToUpload").send_keys(abspath(bot_filename))
 	driver.find_element_by_name("submit").click()
 
@@ -61,4 +61,4 @@ if __name__ == "__main__":
 	# upload, expect pass
 
 	# cleanup
-	ssh_proc.wait()
+	#ssh_proc.wait()

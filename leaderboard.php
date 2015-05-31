@@ -7,7 +7,7 @@ $ties = array();
 $newwins = array();
 $newlosses = array();
 $newties = array();
-$files = array_diff(scandir('bots/'), array(".", "..", "index.php"));
+$files = array_diff(scandir('bots/'), array(".", "..", "index.php", ".gitignore"));
 $index = 0;
 foreach($files as $file) {
 	$bots[$index++] = $file;

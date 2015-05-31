@@ -52,7 +52,7 @@ require("header.php");
 <?php echo $error_string; ?>
 <br>
 <h1>Pending Robots:</h1>
-<?php $files=array_diff(scandir("pending"), array(".", "..", "index.php"));
+<?php $files=array_diff(scandir("pending"), array(".", "..", "index.php", ".gitignore"));
 	if($files)
 	{
 		foreach ($files as $file)
