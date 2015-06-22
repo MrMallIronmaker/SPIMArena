@@ -9,17 +9,37 @@ from selenium.webdriver.support import expected_conditions as ec
 
 from test_access import shib_login
 from sys import argv
-from subprocess import Popen, PIPE
 from os.path import abspath
 from time import sleep
+from getpass import getpass
+import paramiko
 
 
 # Initialize the ssh connection
 def ssh_init():
-	proc = Popen("ssh -tt {0}@edu-staging.cs.illinois.edu".format(argv[1]), # args
-		stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
-	#print proc.communicate()
-	return proc
+	ssh = paramiko.SSHClient()
+	# change this if you run into security issues
+	ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+
+	# give the user three tries to enter the password.
+	connected = False
+	for i in range(3):
+		password_ = getpass("SSH password for edu-staging:")
+		try:
+			ssh.connect('edu-staging.cs.illinois.edu', username='mrmillr3', password=password_)
+			connected = True
+			break
+		except paramiko.AuthenticationException:
+			# give the user another try
+			pass
+
+	# take care of broken connections
+	if not connected:
+		print "Failed to login."
+		exit(2)
+
+	return ssh
+
 
 # upload through the web interface
 def upload_bot(driver, bot_filename):
@@ -37,28 +57,52 @@ def verify_upload(driver):
 		sleep(0.5)
 
 # upload and make sure a bot passed and was updated
-def verify_bot_pass(driver, bot_filename):
+def verify_bot_pass(driver, ssh, bot_filename):
 	upload_bot(driver, bot_filename)
 	verify_upload(driver)
 	# but first, make sure it made it to pending
 	# use ssh to make sure the uploaded file made it to bots
 
 # verify_fail
-def verify_bot_fail(driver, bot_filename):
+def verify_bot_fail(driver, ssh, bot_filename):
 	upload_bot(driver, bot_filename)
 	verify_upload(driver)
 
+# returns true if file exists on the remote server, relative to cd
+def remote_file_exists(ssh, filename):
+	_, stdout, _ = ssh.exec_command("[ -f {0} ] && echo exists".format(filename))
+	sleep(1)
+	s = stdout.readlines()
+	print s
+	q = "exists" in s
+	if q:
+		print "File {0} found.".format(filename)
+	return q
+
 # main
 if __name__ == "__main__":
-	driver = webdriver.Firefox()
-	shib_login(driver)
-	# ssh init
-	#ssh_proc = ssh_init()
-	#print ssh_proc.communicate("ls\n")
+	#driver = webdriver.Firefox()
+	#shib_login(driver)
 
-	# upload, expect fail
-	verify_bot_pass(driver, "goodbot.s")
+	# initialize the secure shell
+	ssh = ssh_init()
+	a, b, c = ssh.exec_command("cd /var/www/html/secure/spimarena")
+	d, e, f = ssh.exec_command("ls")#"[ -f pending/mrmillr3 ] && echo exists")
+	for i in [ b, c, e, f]:
+		print i.readlines()
+
+		# OK. SO HERE'S WHERE I LEFT OFF:
+		# I can't tell why the remote_file_exists function fails to work.
+		# I tried ls, but then it kicked me off for too many incorrect passwords.
+		# lol
+
+	ssh.close()
+	exit()
+
 	# upload, expect pass
+	#verify_bot_pass(driver, ssh, "goodbot.s")
+	remote_file_exists(ssh, "pending/mrmillr3")
+	# upload, expect fail
 
 	# cleanup
-	#ssh_proc.wait()
+	ssh.close()
