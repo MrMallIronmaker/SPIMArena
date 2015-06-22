@@ -7,7 +7,7 @@ all: sync access upload request
 
 sync:
 	./git-sync-local
-	echo "cd /var/www/html/secure/spimarena; ./git-sync-remote" | ssh $(USER)@edu-staging.cs.illinois.edu
+	ssh $(USER)@edu-staging.cs.illinois.edu "cd /var/www/html/secure/spimarena; ./git-sync-remote"
 
 access:
 	python test_access.py $(USER)
