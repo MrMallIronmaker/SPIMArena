@@ -47,7 +47,7 @@ do
 	# Run the spimbot competition and parse the output
 	FILENAME=$(echo $BOT)_v_$(echo $BOT2)
 	#echo "/usr/bin/timeout 60s env DISPLAY=:67 /usr/local/bin/QtSpimbot -file $(dirname $0)/bots/$BOT -file2 $(dirname $0)/bots/$BOT2 -maponly -run -tournament -randommap -largemap -drawfreq 19 -exit_when_done -quiet -debug > $(dirname $0)/debug/$FILENAME.txt"
-	timeout 90s env DISPLAY=:67 ./QtSpimbot -file $(dirname $0)/bots/$BOT -file2 $(dirname $0)/bots/$BOT2 -maponly -run -tournament -randommap -largemap -exit_when_done -multi_quadrants -quadrant_modes > $(dirname $0)/debug/$FILENAME.txt
+	timeout 30s env DISPLAY=:67 ./QtSpimbot -file $(dirname $0)/bots/$BOT -file2 $(dirname $0)/bots/$BOT2 -maponly -run -tournament -randommap -largemap -exit_when_done -multi_quadrants -quadrant_modes > $(dirname $0)/debug/$FILENAME.txt
 
 	# take screenshots of the battle?
 	#while ()

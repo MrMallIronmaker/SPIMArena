@@ -23,7 +23,7 @@ if ($_FILES)
 	} else {
 	    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
     	        $error_string = "<p style='color:green'>The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded and renamed as " . $netId . ".</p>";
-		shell_exec("./bot_test.sh " . $netId . " > out_bot_test.txt 2>&1 &");
+		shell_exec("./bot_test.sh " . $netId . " > upload_out.txt 2>&1 &");
     	    } else {
         	$error_string = "<p style='color:red'>Sorry, there was an error uploading your file.</p>";
     	    }
